@@ -20,16 +20,20 @@ function  logWarn() {
 
 # ==  Rancher login == 
 # Check envs
-logInfo "Check environment variables."
+logInfo "Check environment variables..."
 to_track=( RANCHER_URL RANCHER_TOKEN KUBERNETES_DEPLOYMENT KUBERNETES_NAMESPACE STAMP )
 for env in "${to_track[@]}"; do 
     if [ -z "$env" ]; then
-       logError "Please set a value for $env"
+       	logError "Please set a value for $env"
+	exit -1
     fi
 done
+logInfo "Login to kubernetes cluster..."
 rancher login $RANCHER_URL --token $RANCHER_TOKEN
 
 
 # == Deployment ==
+logInfo "Upgrade $KUBERNETES_DEPLOYMENT."
 rancher kubectl set env deployments/$KUBERNETES_DEPLOYMENT -n $KUBERNETES_NAMESPACE GIT_HASH=$STAMP
 rancher kubectl rollout status deployments/$KUBERNETES_DEPLOYMENT -n $KUBERNETES_NAMESPACE -w
+logInfo "Upgrade succeeded."
