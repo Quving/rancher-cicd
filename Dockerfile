@@ -1,17 +1,22 @@
-FROM debian:buster
+FROM alpine:latest
 
 MAINTAINER vinh-ngu@hotmail.com
 
 ENV RANCHER_VERSION v2.3.0-rc6
 
 # Install deps
-RUN apt update; apt install -y wget
+RUN apk add wget curl bash ncurses
 
 # Install rancher-cli
 RUN wget -O rancher-cli.tar.gz https://github.com/rancher/cli/releases/download/${RANCHER_VERSION}/rancher-linux-amd64-${RANCHER_VERSION}.tar.gz
 RUN mkdir rancher-cli
 RUN tar xvf rancher-cli.tar.gz -C rancher-cli --strip-components 2
 RUN ln -s /rancher-cli/rancher /usr/bin/rancher
+
+# Install kubectl
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+RUN chmod +x kubectl
+RUN ln -s /kubectl /usr/bin/kubectl
 
 COPY entrypoint.sh entrypoint.sh
 RUN chmod +x entrypoint.sh
