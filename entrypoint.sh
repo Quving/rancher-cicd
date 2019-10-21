@@ -1,4 +1,4 @@
-#!/bin/bash*
+#!/bin/bash
 
 set -e
 
@@ -21,12 +21,15 @@ function  logWarn() {
 # ==  Rancher login == 
 # Check envs
 logInfo "Check environment variables."
-to_track=( RANCHER_URL RANCHER_TOKEN )
+to_track=( RANCHER_URL RANCHER_TOKEN KUBERNETES_DEPLOYMENT KUBERNETES_NAMESPACE STAMP )
 for env in "${to_track[@]}"; do 
     if [ -z "$env" ]; then
        logError "Please set a value for $env"
     fi
 done
-
 rancher login $RANCHER_URL --token $RANCHER_TOKEN
 
+
+# == Deployment ==
+rancher kubectl set env deployments/$KUBERNETES_DEPLOYMENT -n $KUBERNETES_NAMESPACE GIT_HASH=$STAMP
+rancher kubectl rollout status deployments/$KUBERNETES_DEPLOYMENT -n $KUBERNETES_NAMESPACE -w
