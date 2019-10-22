@@ -12,6 +12,7 @@ RUN apk add wget curl bash ncurses
 RUN wget -O rancher-cli.tar.gz https://github.com/rancher/cli/releases/download/${RANCHER_VERSION}/rancher-linux-amd64-${RANCHER_VERSION}.tar.gz
 RUN mkdir rancher-cli
 RUN tar xvf rancher-cli.tar.gz -C rancher-cli --strip-components 2
+RUN rm -rf rancher-cli.tar.gz
 RUN ln -s /rancher-cli/rancher /usr/bin/rancher
 
 # Install kubectl
@@ -22,4 +23,5 @@ RUN ln -s /kubectl /usr/bin/kubectl
 COPY entrypoint.sh entrypoint.sh
 RUN chmod +x entrypoint.sh
 
+WORKDIR /app
 CMD ["./entrypoint.sh"]
