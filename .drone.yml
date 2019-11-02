@@ -4,7 +4,7 @@ steps:
 - name: publish
   image: plugins/docker
   settings:
-    repo: pingu/rancher-cicd-deployment
+    repo: pingu/${DRONE_REPO}
     tags: latest
     username:
       from_secret: docker_username
