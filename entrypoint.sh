@@ -18,12 +18,12 @@ function  logWarn() {
 }
 
 
-# ==  Rancher login == 
+# ==  Rancher login ==
 # Check envs
 logInfo "Check environment variables..."
 to_track=( RANCHER_URL RANCHER_TOKEN KUBERNETES_DEPLOYMENT KUBERNETES_NAMESPACE STAMP )
-for env in "${to_track[@]}"; do 
-    if [ -z "$env" ]; then
+for env in "${to_track[@]}"; do
+    if [ "${!env}" = "" ]; then
        	logError "Please set a value for $env"
 	exit -1
     fi

@@ -20,8 +20,8 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s 
 RUN chmod +x kubectl
 RUN ln -s /kubectl /usr/bin/kubectl
 
-COPY entrypoint.sh entrypoint.sh
-RUN chmod +x entrypoint.sh
+COPY entrypoint.sh /bin/entrypoint.sh
+RUN chmod +x /bin/entrypoint.sh
 
 WORKDIR /app
-CMD ["./entrypoint.sh"]
+CMD ["/bin/entrypoint.sh"]
