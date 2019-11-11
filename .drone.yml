@@ -1,7 +1,10 @@
+---
 kind: pipeline
+type: docker
 name: pipeline
+
 steps:
-- name: publish
+- name: publish latest
   image: plugins/docker
   settings:
     repo: pingu/rancher-cicd-deployment
@@ -14,3 +17,16 @@ steps:
     status: [ success ]
     branch: [ master ]
 
+- name: publish tagged docker-image
+  image: plugins/docker
+  settings:
+    repo: pingu/rancher-cicd-deployment
+    tags: ${DRONE_TAG}
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+  when:
+    status: [ success ]
+    event:
+      - tag
