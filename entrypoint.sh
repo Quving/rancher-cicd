@@ -17,8 +17,6 @@ function  logWarn() {
     echo -e $2 "[ ${color}Warning$(tput sgr0) ] $(date "+%D-%T")\t $(tput bold)$1$(tput sgr0)"
 }
 
-
-# ==  Rancher login ==
 # Check envs
 logInfo "Check environment variables..."
 to_track=( RANCHER_URL RANCHER_TOKEN KUBERNETES_DEPLOYMENT KUBERNETES_NAMESPACE STAMP )
@@ -28,12 +26,20 @@ for env in "${to_track[@]}"; do
 	exit -1
     fi
 done
+
+# Rancher login
 logInfo "Login to kubernetes cluster..."
-rancher login $RANCHER_URL --token $RANCHER_TOKEN
+rancher login $RANCHER_URL --token $RANCHER_TOKEN > /dev/null 2>&1
 
+# If login failed.
+if [ ! "$(echo $?)" == 0 ]; then
+    logError "Wrong credentials provided. Check your 'RANCHER_URL' and 'RANCHER_TOKEN'"
+    exit 1
+fi
+logInfo "Logged in successfully."
 
-# == Deployment ==
+# Deploy service
 logInfo "Upgrade $KUBERNETES_DEPLOYMENT."
-rancher kubectl set env deployments/$KUBERNETES_DEPLOYMENT -n $KUBERNETES_NAMESPACE GIT_HASH=$STAMP
+rancher kubectl set env deployments/$KUBERNETES_DEPLOYMENT -n $KUBERNETES_NAMESPACE GIT_HASH=$STAMP > /dev/null 2>&1
 rancher kubectl rollout status deployments/$KUBERNETES_DEPLOYMENT -n $KUBERNETES_NAMESPACE -w
 logInfo "Upgrade succeeded."
