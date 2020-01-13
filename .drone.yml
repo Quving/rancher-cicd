@@ -17,7 +17,7 @@ steps:
     status: [ success ]
     branch: [ master ]
 
-- name: publish tagged docker-image
+- name: publish tag
   image: plugins/docker
   settings:
     repo: pingu/rancher-cicd-deployment
