@@ -9,17 +9,18 @@ ENV TERM konsole
 RUN apk add wget curl bash ncurses
 
 # Install rancher-cli
-RUN wget -O rancher-cli.tar.gz https://github.com/rancher/cli/releases/download/${RANCHER_VERSION}/rancher-linux-amd64-${RANCHER_VERSION}.tar.gz
+RUN wget -O rancher-cli.tar.gz "https://github.com/rancher/cli/releases/download/${RANCHER_VERSION}/rancher-linux-amd64-${RANCHER_VERSION}.tar.gz"
 RUN mkdir rancher-cli
 RUN tar xvf rancher-cli.tar.gz -C rancher-cli --strip-components 2
 RUN rm -rf rancher-cli.tar.gz
 RUN ln -s /rancher-cli/rancher /usr/bin/rancher
 
 # Install kubectl
-RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl"
 RUN chmod +x kubectl
 RUN ln -s /kubectl /usr/bin/kubectl
 
+# Prepare entrypoint
 COPY entrypoint.sh /bin/entrypoint.sh
 RUN chmod +x /bin/entrypoint.sh
 
