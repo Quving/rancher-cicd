@@ -10,15 +10,16 @@ This container upgrades a desired deployment on your k8s cluster.
 ## Available Environment-Variables
 | Environment Variable | Required | Description |   |
 |----------------------|----------|-------------|---|
-| RANCHER_URL          |  :heavy_check_mark:        | [More](https://rancher.com/docs/rancher/v2.x/en/cli/#cli-authentication)            |   |
+| RANCHER_URL          |  :heavy_check_mark:        | [More](https://rancher.com/docs/rancher/v2.x/en/cli/#cli-authentication)           |   |
 | RANCHER_TOKEN        |  :heavy_check_mark:        | [More](https://rancher.com/docs/rancher/v2.x/en/cli/#cli-authentication)           |   |
-| KUBERNETES_NAMESPACE |  :heavy_check_mark:        |  Namespace of your kubernetes Cluster           |   |   |
-| KUBERNETES_DEPLOYMENT |  :heavy_check_mark:        | The deployment Ressource you want to upgrade.             |   |   |
-| STAMP                 |  :heavy_check_mark:        | The value, you want to inject into your container. For instance the commit_sha.            |   |   |
+| KUBERNETES_NAMESPACE |  :heavy_check_mark:        |  Namespace of your kubernetes Cluster                                              |   |   |
+| KUBERNETES_DEPLOYMENT |  :heavy_check_mark:        | The deployment Ressource you want to upgrade.                                     |   |   |
+| KUBERNETES_OPTIONS    |  :heavy_multiplication_x:  | Some options you would like to pass to kubectl.                                   |   |   |
+| STAMP                 |  :heavy_check_mark:        | The value, you want to inject into your container. For instance the commit_sha.   |   |   |
 
 
 
-## Usage 
+## Usage
 ### Example
 ```
 docker run --rm \
