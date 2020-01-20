@@ -2,7 +2,7 @@ FROM alpine:latest
 
 MAINTAINER vinh-ngu@hotmail.com
 
-ENV RANCHER_VERSION v2.3.0-rc6
+ENV RANCHER_VERSION v2.3.2
 ENV TERM konsole
 
 # Install deps
