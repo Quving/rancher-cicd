@@ -28,8 +28,9 @@ for env in "${to_track[@]}"; do
 done
 
 # Rancher login
+RANCHER_OPTIONS=${RANCHER_OPTIONS:-''}
 logInfo "Login to kubernetes cluster..."
-rancher login $RANCHER_URL --token $RANCHER_TOKEN > /dev/null 2>&1
+rancher login $RANCHER_URL --token $RANCHER_TOKEN $RANCHER_OPTIONS > /dev/null 2>&1
 
 # If login failed.
 if [ ! "$(echo $?)" == 0 ]; then
