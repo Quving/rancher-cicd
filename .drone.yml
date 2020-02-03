@@ -20,7 +20,7 @@ steps:
 - name: publish tag
   image: plugins/docker
   settings:
-    repo: quving/rancher
+    repo: quving/rancher-cicd
     tags: ${DRONE_TAG}
     username:
       from_secret: docker_username
