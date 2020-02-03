@@ -7,7 +7,8 @@ steps:
 - name: publish latest
   image: plugins/docker
   settings:
-    repo: quving/rancher-cicd
+    repo:
+      from_secret: docker_repository
     tags: latest
     username:
       from_secret: docker_username
@@ -20,7 +21,8 @@ steps:
 - name: publish tag
   image: plugins/docker
   settings:
-    repo: quving/rancher-cicd
+    repo:
+      from_secret: docker_repository
     tags: ${DRONE_TAG}
     username:
       from_secret: docker_username
