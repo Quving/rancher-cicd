@@ -27,8 +27,13 @@ for env in "${to_track[@]}"; do
     fi
 done
 
+if [ "${RANCHER_CONTEXT}" = "" ]; then
+    RANCHER_OPTIONS=""
+else
+    RANCHER_OPTIONS="--context $RANCHNER_CONTEXT"
+fi
+
 # Rancher login
-RANCHER_OPTIONS=${RANCHER_OPTIONS:-''}
 logInfo "Login to kubernetes cluster..."
 rancher login $RANCHER_URL --token $RANCHER_TOKEN $RANCHER_OPTIONS > /dev/null 2>&1
 
