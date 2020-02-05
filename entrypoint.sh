@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 function  logInfo() {
     color=`tput setaf 2`
     echo -e $2 "[ ${color}Info$(tput sgr0) ]    $(date "+%D-%T")\t $(tput bold)$1$(tput sgr0)"
@@ -47,11 +45,11 @@ logInfo "Logged in successfully."
 # Deploy service
 KUBECTL_OPTIONS=${KUBECTL_OPTIONS:-''}
 logInfo "Upgrade $KUBERNETES_DEPLOYMENT."
-rancher kubectl $KUBECTL_OPTIONS set env deployments/$KUBERNETES_DEPLOYMENT -n $KUBERNETES_NAMESPACE GIT_HASH=$STAMP > logs.txt 2>&1
-
+rancher kubectl $KUBECTL_OPTIONS set env deployments/$KUBERNETES_DEPLOYMENT -n $KUBERNETES_NAMESPACE GIT_HASH=$STAMP > error.log 2>&1
+# If upgrade failed.
 if [ ! "$(echo $?)" == 0 ]; then
-    logError "Error occured while upgrading deployments. Please check logs below. "
-    cat logs.txt
+    logError "Error occured while upgrading k8s deployment. Please check the logs below."
+    cat error.log
     exit 1
 fi
 rancher kubectl $KUBECTL_OPTIONS rollout status deployments/$KUBERNETES_DEPLOYMENT -n $KUBERNETES_NAMESPACE -w
