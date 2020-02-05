@@ -28,7 +28,7 @@ done
 if [ "${RANCHER_CONTEXT}" = "" ]; then
     RANCHER_OPTIONS=""
 else
-    RANCHER_OPTIONS="--context $RANCHNER_CONTEXT"
+    RANCHER_OPTIONS="--context $RANCHER_CONTEXT"
 fi
 
 # Rancher login
