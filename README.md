@@ -15,7 +15,7 @@ This container upgrades a desired deployment on your k8s cluster.
 | KUBERNETES_NAMESPACE  |  :heavy_check_mark:        |  Namespace of your kubernetes Cluster                                             |   |   |
 | KUBERNETES_DEPLOYMENT |  :heavy_check_mark:        | The deployment Ressource you want to upgrade.                                     |   |   |
 | KUBERNETES_OPTIONS    |  :heavy_multiplication_x:  | Some options you would like to pass to kubectl.                                   |   |   |
-| RANCHER_OPTIONS       |  :heavy_multiplication_x:  | Some options you would like to pass to rancher (login).                           |   |   |
+| RANCHER_CONTEXT       |  :heavy_multiplication_x:  | In case you've got multiple kubernetes cluster you have to specify a cluster by the context.  |   |   |
 | STAMP                 |  :heavy_check_mark:        | The value, you want to inject into your container. For instance the commit_sha.   |   |   |
 
 
