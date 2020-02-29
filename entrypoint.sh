@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 function  logInfo() {
     color=`tput setaf 2`
@@ -44,13 +45,19 @@ logInfo "Logged in successfully."
 
 # Deploy service
 KUBECTL_OPTIONS=${KUBECTL_OPTIONS:-''}
-logInfo "Upgrade $KUBERNETES_DEPLOYMENT."
-rancher kubectl $KUBECTL_OPTIONS set env deployments/$KUBERNETES_DEPLOYMENT -n $KUBERNETES_NAMESPACE GIT_HASH=$STAMP > error.log 2>&1
-# If upgrade failed.
-if [ ! "$(echo $?)" == 0 ]; then
-    logError "Error occured while upgrading k8s deployment. Please check the logs below."
-    cat error.log
-    exit 1
-fi
-rancher kubectl $KUBECTL_OPTIONS rollout status deployments/$KUBERNETES_DEPLOYMENT -n $KUBERNETES_NAMESPACE -w
+IFS=',' # hyphen (-) is set as delimiter
+read -ra ADDR <<< "$KUBERNETES_DEPLOYMENT" # str is read into an array as tokens separated by IFS
+for workload in "${ADDR[@]}"; do # access each element of array
+    logInfo "Upgrade $workload..."
+    rancher kubectl $KUBECTL_OPTIONS set env deployments/$workload -n $KUBERNETES_NAMESPACE GIT_HASH=$STAMP > error.log 2>&1
+
+    # If upgrade failed.
+    if [ ! "$(echo $?)" == 0 ]; then
+        logError "Error occured while upgrading k8s deployment ($workload). Please check the logs below."
+        cat error.log
+        exit 1
+    fi
+    rancher kubectl $KUBECTL_OPTIONS rollout status deployments/$workload -n $KUBERNETES_NAMESPACE -w
+done
 logInfo "Upgrade succeeded."
+
