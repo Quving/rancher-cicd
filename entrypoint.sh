@@ -27,14 +27,14 @@ for env in "${to_track[@]}"; do
 done
 
 if [ "${RANCHER_CONTEXT}" = "" ]; then
-    RANCHER_OPTIONS=""
+    RANCHER_CONTEXT_PARAM=""
 else
-    RANCHER_OPTIONS="--context $RANCHER_CONTEXT"
+    RANCHER_CONTEXT_PARAM="--context $RANCHER_CONTEXT"
 fi
 
 # Rancher login
 logInfo "Login to kubernetes cluster..."
-rancher login $RANCHER_URL --token $RANCHER_TOKEN $RANCHER_OPTIONS > /dev/null 2>&1
+rancher login $RANCHER_URL --token $RANCHER_TOKEN $RANCHER_CONTEXT_PARAM > /dev/null 2>&1
 
 # If login failed.
 if [ ! "$(echo $?)" == 0 ]; then
@@ -43,13 +43,12 @@ if [ ! "$(echo $?)" == 0 ]; then
 fi
 logInfo "Logged in successfully."
 
-# Deploy service
-KUBECTL_OPTIONS=${KUBECTL_OPTIONS:-''}
+# Deploy service(s)
 IFS=',' # hyphen (-) is set as delimiter
 read -ra ADDR <<< "$KUBERNETES_DEPLOYMENT" # str is read into an array as tokens separated by IFS
 for workload in "${ADDR[@]}"; do # access each element of array
     logInfo "Upgrade $workload..."
-    rancher kubectl $KUBECTL_OPTIONS set env deployments/$workload -n $KUBERNETES_NAMESPACE GIT_HASH=$STAMP > error.log 2>&1
+    rancher kubectl set env deployments/$workload -n $KUBERNETES_NAMESPACE GIT_HASH=$STAMP > error.log 2>&1
 
     # If upgrade failed.
     if [ ! "$(echo $?)" == 0 ]; then
@@ -57,7 +56,6 @@ for workload in "${ADDR[@]}"; do # access each element of array
         cat error.log
         exit 1
     fi
-    rancher kubectl $KUBECTL_OPTIONS rollout status deployments/$workload -n $KUBERNETES_NAMESPACE -w
+    rancher kubectl rollout status deployments/$workload -n $KUBERNETES_NAMESPACE -w
 done
 logInfo "Upgrade succeeded."
-
