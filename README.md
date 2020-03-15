@@ -1,4 +1,4 @@
-<img src="https://i.imgur.com/Sv1Oqiu.png" width="500"/>
+<img src="https://i.imgur.com/Sv1Oqiu.png" width="400"/>
 
 # Rancher-CICD-Deployment
 [![Build Status](https://drone.quving.com/api/badges/Quving/rancher-cicd/status.svg)](https://drone.quving.com/Quving/rancher-cicd)
