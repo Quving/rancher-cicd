@@ -28,7 +28,7 @@ docker run --rm \
 ```
 
 
-### Example: Integrate in your .gitlab-ci.yml
+### Example: Update your workload in your .gitlab-ci.yml.
 
 ```
 ...
