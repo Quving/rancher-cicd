@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 function  logInfo() {
     color=`tput setaf 2`
@@ -34,7 +33,11 @@ fi
 
 # Rancher login
 logInfo "Login to kubernetes cluster..."
-rancher login $RANCHER_URL --token $RANCHER_TOKEN $RANCHER_CONTEXT_PARAM > /dev/null 2>&1
+if [ "${DEBUG}" = "true" ]; then
+    rancher login $RANCHER_URL --token $RANCHER_TOKEN $RANCHER_OPTIONS
+else
+    rancher login $RANCHER_URL --token $RANCHER_TOKEN $RANCHER_OPTIONS > /dev/null 2>&1
+fi
 
 # If login failed.
 if [ ! "$(echo $?)" == 0 ]; then
@@ -50,10 +53,13 @@ for workload in "${ADDR[@]}"; do # access each element of array
     logInfo "Upgrade $workload..."
     rancher kubectl set env deployments/$workload -n $KUBERNETES_NAMESPACE GIT_HASH=$STAMP > error.log 2>&1
 
-    # If upgrade failed.
+        # If upgrade failed.
     if [ ! "$(echo $?)" == 0 ]; then
         logError "Error occured while upgrading k8s deployment ($workload). Please check the logs below."
+        printf "\n"
         cat error.log
+        printf "\n"
+        logError "Deployment failed."
         exit 1
     fi
     rancher kubectl rollout status deployments/$workload -n $KUBERNETES_NAMESPACE -w
