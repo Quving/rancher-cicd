@@ -26,9 +26,9 @@ for env in "${to_track[@]}"; do
 done
 
 if [ "${RANCHER_CONTEXT}" = "" ]; then
-    RANCHER_CONTEXT_PARAM=""
+    RANCHER_OPTIONS=""
 else
-    RANCHER_CONTEXT_PARAM="--context $RANCHER_CONTEXT"
+    RANCHER_OPTIONS="--context $RANCHER_CONTEXT"
 fi
 
 # Rancher login
