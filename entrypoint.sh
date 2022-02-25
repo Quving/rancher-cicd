@@ -50,10 +50,14 @@ logInfo "Logged in successfully."
 IFS=',' # hyphen (-) is set as delimiter
 read -ra ADDR <<< "$KUBERNETES_DEPLOYMENT" # str is read into an array as tokens separated by IFS
 for workload in "${ADDR[@]}"; do # access each element of array
+
     logInfo "Upgrade $workload..."
     rancher kubectl set env deployments/$workload -n $KUBERNETES_NAMESPACE GIT_HASH=$STAMP > error.log 2>&1
 
-        # If upgrade failed.
+    logInfo "Rollout status:"
+    rancher kubectl rollout status deployments/$workload -n $KUBERNETES_NAMESPACE -w
+
+    # If upgrade failed.
     if [ ! "$(echo $?)" == 0 ]; then
         logError "Error occured while upgrading k8s deployment ($workload). Please check the logs below."
         printf "\n"
@@ -62,6 +66,5 @@ for workload in "${ADDR[@]}"; do # access each element of array
         logError "Deployment failed."
         exit 1
     fi
-    rancher kubectl rollout status deployments/$workload -n $KUBERNETES_NAMESPACE -w
 done
 logInfo "Upgrade succeeded."
