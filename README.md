@@ -29,6 +29,16 @@ docker run --rm \
     quving/rancher-cicd:latest
 ```
 
-## Resources
+## FAQ
+### What Rancher-API-Key?
+More information can be found here. https://rancher.com/docs/rancher/v2.5/en/user-settings/api-keys/
+
+**Important**
+It's important to select 'No scope'. Otherwise the rancher-authorization will not work!
+- https://github.com/rancher/rancher/issues/18639
+
+
+
+## Useful Resources
 - Rancher API-KEYS
    - https://rancher.com/docs/rancher/v2.5/en/user-settings/api-keys/
